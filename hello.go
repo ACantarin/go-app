@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	var name string = "André"
-	var version float32 = 1.0
+	name := "André"
+	version := 1.0
 
 	meses := []string{
 		"janeiro", "fevereiro", "março", "abril", "maio", "junho",
