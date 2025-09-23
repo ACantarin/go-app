@@ -2,24 +2,31 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"os"
 	"time"
 )
 
 func main() {
 	exibirIntroducao()
-	exibirMenu()
 
-	option := lerComando()
+	for {
+		exibirMenu()
 
-	switch option {
-	case 1:
-		fmt.Println("Iniciando monitoramento...")
-	case 2:
-		fmt.Println("Exibindo logs...")
-	case 0:
-		fmt.Println("Saindo...")
-	default:
-		fmt.Println("Opção inválida")
+		option := lerComando()
+
+		switch option {
+		case 1:
+			iniciarMonitoramento()
+		case 2:
+			fmt.Println("Exibindo logs...")
+		case 0:
+			fmt.Println("Saindo...")
+			os.Exit(0)
+		default:
+			fmt.Println("Opção inválida")
+			os.Exit(-1)
+		}
 	}
 }
 
