@@ -6,6 +6,24 @@ import (
 )
 
 func main() {
+	exibirIntroducao()
+	exibirMenu()
+
+	option := lerComando()
+
+	switch option {
+	case 1:
+		fmt.Println("Iniciando monitoramento...")
+	case 2:
+		fmt.Println("Exibindo logs...")
+	case 0:
+		fmt.Println("Saindo...")
+	default:
+		fmt.Println("Opção inválida")
+	}
+}
+
+func exibirIntroducao() {
 	name := "André"
 	version := 1.0
 
@@ -24,22 +42,17 @@ func main() {
 	fmt.Printf("Você está usando a versão %.1f\n", version)
 
 	fmt.Println("********************************************")
+}
 
+func exibirMenu() {
 	fmt.Println("1 - Iniciar monitoramento")
 	fmt.Println("2 - Exibir logs")
 	fmt.Println("0 - Sair")
+}
 
+func lerComando() int {
 	var option int
 	fmt.Scan(&option)
 
-	switch option {
-	case 1:
-		fmt.Println("Iniciando monitoramento...")
-	case 2:
-		fmt.Println("Exibindo logs...")
-	case 0:
-		fmt.Println("Saindo...")
-	default:
-		fmt.Println("Opção inválida")
-	}
+	return option
 }
