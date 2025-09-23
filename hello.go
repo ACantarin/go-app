@@ -56,3 +56,18 @@ func lerComando() int {
 
 	return option
 }
+
+func iniciarMonitoramento() {
+	fmt.Println("Iniciando monitoramento...")
+
+	host := "https://www.alura.com.br/"
+	response, _ := http.Get(host)
+
+	if response.StatusCode == 200 {
+		fmt.Println("O site", host, "está online")
+	} else {
+		fmt.Println("O site", host, "está fora do ar")
+	}
+
+	fmt.Println("********************************************")
+}
