@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+const monitoramento = 5
+const delay = 5
+
 func main() {
 	exibirIntroducao()
 
@@ -48,7 +51,7 @@ func exibirIntroducao() {
 	fmt.Printf("Hoje é %d de %s de %d\n", dia, mes, ano)
 	fmt.Printf("Você está usando a versão %.1f\n", version)
 
-	fmt.Println("********************************************")
+	fmt.Println(imprimirSeparador())
 }
 
 func exibirMenu() {
@@ -67,14 +70,31 @@ func lerComando() int {
 func iniciarMonitoramento() {
 	fmt.Println("Iniciando monitoramento...")
 
-	host := "https://www.alura.com.br/"
+	hosts := []string{
+		"https://httpbin.org/status/200",
+		"https://httpbin.org/status/404",
+	}
+
+	for i := 0; i < monitoramento; i++ {
+		for _, host := range hosts {
+			testarHost(host)
+		}
+		time.Sleep(delay * time.Second)
+	}
+
+	fmt.Println(imprimirSeparador())
+}
+
+func testarHost(host string) {
 	response, _ := http.Get(host)
 
 	if response.StatusCode == 200 {
 		fmt.Println("O site", host, "está online")
 	} else {
-		fmt.Println("O site", host, "está fora do ar")
+		fmt.Println("O site", host, "está fora do ar com o status", response.StatusCode)
 	}
+}
 
-	fmt.Println("********************************************")
+func imprimirSeparador() string {
+	return "********************************************"
 }
