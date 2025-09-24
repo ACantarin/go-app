@@ -25,6 +25,7 @@ func main() {
 		case 1:
 			iniciarMonitoramento()
 		case 2:
+			exibirLogs()
 			fmt.Println("Exibindo logs...")
 		case 0:
 			fmt.Println("Saindo...")
@@ -155,6 +156,30 @@ func registrarHost(host string, hostOnline bool) {
 
 	file.WriteString("Host: " + host + " | Status: " + status + " | Data: " + dia + " | Horário: " + hora + "\n")
 	file.WriteString("-------------------------------------------------------------------------------------------------\n")
+
+	file.Close()
+}
+
+func exibirLogs() {
+	file, err := os.Open("logs.txt")
+
+	if err != nil {
+		fmt.Println("Não foi possível abrir o arquivo. Erro:", err)
+		os.Exit(-1)
+	}
+
+	scanner := bufio.NewReader(file)
+
+	for {
+		linha, err := scanner.ReadString('\n')
+		linha = strings.TrimSpace(linha)
+
+		fmt.Println(linha)
+
+		if err == io.EOF {
+			break
+		}
+	}
 
 	file.Close()
 }
