@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-const monitoramento = 5
-const delay = 5
+const monitoramento = 3
+const delay = 3
 
 func main() {
 	exibirIntroducao()
