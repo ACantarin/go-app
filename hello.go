@@ -93,11 +93,16 @@ func testarHost(host string) {
 		return
 	}
 
+	hostOnline := true
+
 	if response.StatusCode == 200 {
 		fmt.Println("O site", host, "está online")
 	} else {
 		fmt.Println("O site", host, "está fora do ar com o status", response.StatusCode)
+		hostOnline = false
 	}
+
+	registrarHost(host, hostOnline)
 }
 
 func imprimirSeparador() string {
@@ -129,4 +134,27 @@ func lerHostsDeArquivo() []string {
 	file.Close()
 
 	return hosts
+}
+
+func registrarHost(host string, hostOnline bool) {
+	file, err := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE, 0666)
+
+	if err != nil {
+		fmt.Println("Não foi possível abrir o arquivo. Erro:", err)
+	}
+
+	status := "Online"
+
+	if !hostOnline {
+		status = "Offline"
+	}
+
+	now := time.Now()
+	dia := now.Format("02/01/2006")
+	hora := now.Format("15:04:05")
+
+	file.WriteString("Host: " + host + " | Status: " + status + " | Data: " + dia + " | Horário: " + hora + "\n")
+	file.WriteString("-------------------------------------------------------------------------------------------------\n")
+
+	file.Close()
 }
