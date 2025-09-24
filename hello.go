@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -70,10 +73,7 @@ func lerComando() int {
 func iniciarMonitoramento() {
 	fmt.Println("Iniciando monitoramento...")
 
-	hosts := []string{
-		"https://httpbin.org/status/200",
-		"https://httpbin.org/status/404",
-	}
+	hosts := lerHostsDeArquivo()
 
 	for i := 0; i < monitoramento; i++ {
 		for _, host := range hosts {
@@ -86,7 +86,12 @@ func iniciarMonitoramento() {
 }
 
 func testarHost(host string) {
-	response, _ := http.Get(host)
+	response, err := http.Get(host)
+
+	if err != nil {
+		fmt.Println("Não foi possível conectar ao host", host, "Erro:", err)
+		return
+	}
 
 	if response.StatusCode == 200 {
 		fmt.Println("O site", host, "está online")
@@ -97,4 +102,31 @@ func testarHost(host string) {
 
 func imprimirSeparador() string {
 	return "********************************************"
+}
+
+func lerHostsDeArquivo() []string {
+	var hosts []string
+
+	file, err := os.Open("hosts.txt")
+
+	if err != nil {
+		fmt.Println("Não foi possível abrir o arquivo. Erro:", err)
+		os.Exit(-1)
+	}
+
+	scanner := bufio.NewReader(file)
+
+	for {
+		linha, err := scanner.ReadString('\n')
+		linha = strings.TrimSpace(linha)
+		hosts = append(hosts, linha)
+
+		if err == io.EOF {
+			break
+		}
+	}
+
+	file.Close()
+
+	return hosts
 }
